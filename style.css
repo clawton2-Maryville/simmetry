@@ -1,0 +1,186 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f5f3ee;
+    color: #333;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.top-bar {
+    min-height: 85px;
+    padding: 15px 25px;
+    background-color: #304f46;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-bar h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.top-bar p {
+    margin: 3px 0 0;
+    font-size: 14px;
+}
+
+.top-bar nav {
+    display: flex;
+    gap: 10px;
+}
+
+.top-bar button {
+    padding: 9px 15px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background: transparent;
+    color: white;
+}
+
+.workspace {
+    display: grid;
+    grid-template-columns: 190px 1fr 220px;
+    min-height: 650px;
+}
+
+.tool-panel,
+.properties-panel {
+    padding: 20px;
+    background-color: #e5ded2;
+}
+
+.tool-panel {
+    border-right: 1px solid #c7bfb3;
+}
+
+.properties-panel {
+    border-left: 1px solid #c7bfb3;
+}
+
+.tool-panel h2,
+.properties-panel h2 {
+    font-size: 17px;
+    margin: 10px 0 15px;
+}
+
+.tool {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: white;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.canvas-area {
+    padding: 20px;
+}
+
+.canvas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.canvas-header h2 {
+    margin: 0 0 15px;
+}
+
+.floor-plan {
+    position: relative;
+    height: 560px;
+    border: 1px solid #aaa;
+    background-color: white;
+
+    background-image:
+        linear-gradient(#ddd 1px, transparent 1px),
+        linear-gradient(90deg, #ddd 1px, transparent 1px);
+
+    background-size: 25px 25px;
+}
+
+.sample-room {
+    position: absolute;
+    top: 100px;
+    left: 130px;
+
+    width: 250px;
+    height: 200px;
+
+    border: 3px solid #304f46;
+    background-color: rgba(48, 79, 70, 0.08);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-weight: bold;
+}
+
+.sample-room small {
+    margin-top: 5px;
+    font-weight: normal;
+}
+
+.properties-panel label {
+    display: block;
+    margin: 15px 0 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.properties-panel input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+.primary-button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: #304f46;
+    color: white;
+}
+
+footer {
+    min-height: 55px;
+    padding: 10px 25px;
+
+    background-color: #304f46;
+    color: white;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+footer button {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+
+    border: none;
+    border-radius: 4px;
+}
