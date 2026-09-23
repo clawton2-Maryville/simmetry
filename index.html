@@ -27,15 +27,42 @@
     <aside class="tool-panel">
         <h2>Rooms</h2>
 
-        <button class="tool">Living Room</button>
-        <button class="tool">Kitchen</button>
-        <button class="tool">Bedroom</button>
-        <button class="tool">Bathroom</button>
+        <button class="tool room-tool" data-room="Living Room">
+        Living Room
+        </button>
+
+        <button class="tool room-tool" data-room="Kitchen">
+        Kitchen
+        </button>
+
+        <button class="tool room-tool" data-room="Bedroom">
+        Bedroom
+        </button>
+
+        <button class="tool room-tool" data-room="Bathroom">
+        Bathroom
+        </button>
 
         <h2>Elements</h2>
 
         <button class="tool">Door</button>
         <button class="tool">Window</button>
+
+        <div class="plan-summary">
+            <h2>Plan Summary</h2>
+    
+            <p>
+                Rooms:
+                <strong id="roomCount">1</strong>
+            </p>
+    
+            <p>
+                Total Area:
+                <strong>
+                    <span id="totalArea">168</span> sq. ft.
+                </strong>
+            </p>
+        </div>
     </aside>
 
     <section class="canvas-area">
@@ -45,9 +72,20 @@
         </div>
 
         <div id="floorPlan" class="floor-plan">
-            <div class="sample-room">
-                <span>Living Room</span>
-                <small>12' × 14'</small>
+            <div class="sample-room room selected" data-id="1">
+
+                <span class="room-name">
+                    Living Room
+                </span>
+
+                <small class="room-dimensions">
+                    12' × 14'
+                </small>
+
+                <small class="room-area">
+                    168 sq. ft.
+                </small>
+
             </div>
         </div>
     </section>
@@ -67,6 +105,7 @@
             type="number"
             id="width"
             value="12"
+            min="1"
         >
 
         <label for="height">Height</label>
@@ -74,15 +113,42 @@
             type="number"
             id="height"
             value="14"
+            min="1"
         >
+        <div class="room-area-display">
+            <p>
+                Room Area:
+                <strong>
+                    <span id="roomArea">168</span> sq. ft.
+                </strong>
+            </p>
+        </div>
 
-        <button class="primary-button">Update Room</button>
+        <button
+            id="updateRoomBtn"
+            class="primary-button"
+        >
+            Update Room
+        </button>
+
+        <button
+            id="deleteRoomBtn"
+            class="delete-button"
+        >
+            Delete Room
+        </button>
     </aside>
 
 </main>
 
 <footer>
     <span>Simmetry Floor Plan Builder</span>
+      <span>
+        Total Area:
+        <strong>
+            <span id="footerArea">168</span> sq. ft.
+        </strong>
+    </span>
 
     <div>
         <button>−</button>
