@@ -184,3 +184,137 @@ footer button {
     border: none;
     border-radius: 4px;
 }
+
+.room-tool {
+    cursor: pointer;
+}
+
+.room-tool:hover {
+    background-color: #e5e9e2;
+}
+
+.floor-plan {
+    position: relative;
+    overflow: hidden;
+    min-height: 550px;
+
+    background-image:
+        linear-gradient(
+            #e1e1e1 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            #e1e1e1 1px,
+            transparent 1px
+        );
+
+    background-size: 25px 25px;
+}
+
+.room {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #d9e0d5;
+    border: 3px solid #73806e;
+    cursor: pointer;
+    box-sizing: border-box;
+    min-width: 70px;
+    min-height: 60px;
+    transition:
+        background-color 0.2s,
+        border 0.2s;
+}
+
+.room:hover {
+    background-color: #cbd6c7;
+}
+
+.room.selected {
+    border: 4px solid #435c47;
+    background-color: #becdb9;
+}
+
+.room-name {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.room-dimensions {
+    font-size: 12px;
+
+    margin-bottom: 3px;
+}
+
+.room-area {
+    font-size: 11px;
+
+    color: #555;
+}
+
+.plan-summary {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #cccccc;
+}
+
+
+.plan-summary h2 {
+    margin-bottom: 12px;
+}
+
+
+.plan-summary p {
+    font-size: 13px;
+    margin: 8px 0;
+}
+
+
+.room-area-display {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f2f3ef;
+    border-radius: 5px;
+}
+
+
+.room-area-display p {
+    margin: 0;
+    font-size: 13px;
+}
+
+
+.delete-button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #b8a7a2;
+    border-radius: 5px;
+    background-color: #eee7e5;
+    color: #7b4038;
+    cursor: pointer;
+}
+
+
+.delete-button:hover {
+    background-color: #e3d6d2;
+}
+
+
+.properties-panel input {
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+#updateRoomBtn {
+    width: 100%;
+
+    cursor: pointer;
+}
