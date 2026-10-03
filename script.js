@@ -281,6 +281,9 @@ function loadSelectedRoom() {
 
     roomHeightInput.value =
         room.height;
+    
+    roomAreaDisplay.textContent =
+    room.width * room.height;
 
 }
 
