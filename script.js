@@ -20,6 +20,7 @@ const exportBtn = document.getElementById("exportBtn");
 const roomNameInput = document.getElementById("roomName");
 const roomWidthInput = document.getElementById("roomWidth");
 const roomHeightInput = document.getElementById("roomHeight");
+const roomAreaDisplay = document.getElementById("roomArea");
 
 const updateRoomBtn = document.getElementById("updateRoomBtn");
 const deleteRoomBtn = document.getElementById("deleteRoomBtn");
