@@ -472,6 +472,73 @@ newPlanBtn.addEventListener(
     }
 );
 
+let draggedRoom = null;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+// Start dragging when the mouse is pressed on a room
+floorPlan.addEventListener("mousedown", function (event) {
+
+    const room = event.target.closest(".room");
+
+    if (!room) {
+        return;
+    }
+
+    draggedRoom = room;
+
+    const roomRect = room.getBoundingClientRect();
+
+    dragOffsetX = event.clientX - roomRect.left;
+    dragOffsetY = event.clientY - roomRect.top;
+
+    room.style.cursor = "grabbing";
+});
+
+// Move selected room
+document.addEventListener("mousemove", function (event) {
+
+    if (!draggedRoom) {
+        return;
+    }
+
+    const floorPlanRect = floorPlan.getBoundingClientRect();
+
+    let newX =
+        event.clientX -
+        floorPlanRect.left -
+        dragOffsetX;
+
+    let newY =
+        event.clientY -
+        floorPlanRect.top -
+        dragOffsetY;
+
+    // Keep room inside floor plan
+    const maxX =
+        floorPlan.clientWidth -
+        draggedRoom.offsetWidth;
+
+    const maxY =
+        floorPlan.clientHeight -
+        draggedRoom.offsetHeight;
+
+    newX = Math.max(0, Math.min(newX, maxX));
+    newY = Math.max(0, Math.min(newY, maxY));
+
+    draggedRoom.style.left = newX + "px";
+    draggedRoom.style.top = newY + "px";
+});
+
+// Stop dragging when mouse button is released
+document.addEventListener("mouseup", function () {
+
+    if (draggedRoom) {
+        draggedRoom.style.cursor = "grab";
+        draggedRoom = null;
+    }
+});
+
 
 
 displayRooms();
