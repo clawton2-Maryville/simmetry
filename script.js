@@ -1,24 +1,38 @@
-// ---------- GET HTML ELEMENTS ----------
+// =====================================================
+// SIMMETRY
+// Floor Plan Builder
+// Sprint 3
+// =====================================================
+
+
+// =====================================================
+// GET HTML ELEMENTS
+// =====================================================
 
 const floorPlan = document.getElementById("floorPlan");
 
-const roomButtons = document.querySelectorAll(".room-tool");
+const roomButtons = document.querySelectorAll("[data-room]");
+
+const newPlanBtn = document.getElementById("newPlanBtn");
+const saveBtn = document.getElementById("saveBtn");
+const exportBtn = document.getElementById("exportBtn");
 
 const roomNameInput = document.getElementById("roomName");
-const widthInput = document.getElementById("width");
-const heightInput = document.getElementById("height");
-
-const roomArea = document.getElementById("roomArea");
-const roomCount = document.getElementById("roomCount");
-const totalArea = document.getElementById("totalArea");
-const footerArea = document.getElementById("footerArea");
+const roomWidthInput = document.getElementById("roomWidth");
+const roomHeightInput = document.getElementById("roomHeight");
 
 const updateRoomBtn = document.getElementById("updateRoomBtn");
 const deleteRoomBtn = document.getElementById("deleteRoomBtn");
-const newPlanBtn = document.getElementById("newPlanBtn");
+
+const roomCountDisplay = document.getElementById("roomCount");
+const totalAreaDisplay = document.getElementById("totalArea");
 
 
-// ---------- ROOM DATA ----------
+// =====================================================
+// ROOM DATA
+// =====================================================
+
+// This array stores all rooms currently on the floor plan.
 
 let rooms = [
     {
@@ -26,21 +40,22 @@ let rooms = [
         name: "Living Room",
         width: 12,
         height: 14,
-
-        // SPRINT 3 - Store room position
         x: 30,
         y: 30
     }
 ];
 
-let selectedRoomId = 1;
-
 let nextRoomId = 2;
 
+let selectedRoomId = null;
 
-// ---------- DEFAULT ROOM SIZES ----------
 
-const defaultRoomSizes = {
+// =====================================================
+// DEFAULT ROOM SIZES
+// =====================================================
+
+const roomSizes = {
+
     "Living Room": {
         width: 12,
         height: 14
@@ -57,19 +72,157 @@ const defaultRoomSizes = {
     },
 
     "Bathroom": {
-        width: 6,
+        width: 8,
         height: 8
     }
+
 };
 
 
-// ADD ROOMS
+// =====================================================
+// DISPLAY ROOMS
+// =====================================================
 
-roomButtons.forEach(function(button) {
+function displayRooms() {
 
-    button.addEventListener("click", function() {
+    // Clear the floor plan before redrawing rooms.
+    floorPlan.innerHTML = "";
 
-        const roomType = button.dataset.room;
+    rooms.forEach(function (room) {
+
+        const roomElement = document.createElement("div");
+
+        roomElement.classList.add("room");
+
+        // Store room ID in the HTML element.
+        roomElement.dataset.id = room.id;
+
+        // Display room information.
+        roomElement.innerHTML = `
+            <strong>${room.name}</strong>
+            <span>${room.width}' × ${room.height}'</span>
+        `;
+
+
+        // -------------------------------------------------
+        // ROOM SIZE
+        // -------------------------------------------------
+
+        // Convert room dimensions into pixels.
+        // This is only a visual representation.
+
+        roomElement.style.width =
+            (room.width * 10) + "px";
+
+        roomElement.style.height =
+            (room.height * 10) + "px";
+
+
+        // -------------------------------------------------
+        // SPRINT 3 - ROOM POSITION
+        // -------------------------------------------------
+
+        // Position comes directly from the room object.
+        // This prevents rooms from bouncing back.
+
+        roomElement.style.left =
+            room.x + "px";
+
+        roomElement.style.top =
+            room.y + "px";
+
+
+        // -------------------------------------------------
+        // SELECTED ROOM
+        // -------------------------------------------------
+
+        if (room.id === selectedRoomId) {
+            roomElement.classList.add("selected");
+        }
+
+
+        // -------------------------------------------------
+        // SELECT ROOM
+        // -------------------------------------------------
+
+        roomElement.addEventListener("click", function () {
+
+            selectRoom(room.id);
+
+        });
+
+
+        floorPlan.appendChild(roomElement);
+
+    });
+
+
+    updateSummary();
+
+}
+
+
+// =====================================================
+// ADD ROOM
+// =====================================================
+
+function addRoom(roomType) {
+
+    const defaultSize = roomSizes[roomType];
+
+    if (!defaultSize) {
+        return;
+    }
+
+
+    // Offset rooms so new rooms don't completely overlap.
+
+    const newPosition =
+        30 + (rooms.length * 35);
+
+
+    const newRoom = {
+
+        id: nextRoomId,
+
+        name: roomType,
+
+        width: defaultSize.width,
+
+        height: defaultSize.height,
+
+        // Sprint 3 position data
+
+        x: newPosition,
+
+        y: newPosition
+
+    };
+
+
+    rooms.push(newRoom);
+
+    nextRoomId++;
+
+    selectedRoomId = newRoom.id;
+
+    displayRooms();
+
+    loadSelectedRoom();
+
+}
+
+
+// =====================================================
+// ROOM BUTTONS
+// =====================================================
+
+roomButtons.forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+        const roomType =
+            button.dataset.room;
 
         addRoom(roomType);
 
@@ -78,123 +231,9 @@ roomButtons.forEach(function(button) {
 });
 
 
-function addRoom(roomType) {
-
-    const defaultSize = defaultRoomSizes[roomType];
-
-     const newRoom = {
-        id: nextRoomId,
-        name: roomType,
-        width: defaultSize.width,
-        height: defaultSize.height,
-    
-        // SPRINT 3 - Give new rooms a starting position
-        x: 30 + (rooms.length * 35),
-        y: 30 + (rooms.length * 35)
-    };
-    rooms.push(newRoom);
-
-    selectedRoomId = nextRoomId;
-
-    nextRoomId++;
-
-    displayRooms();
-
-    updatePropertiesPanel();
-
-    updatePlanSummary();
-}
-
-
-// DISPLAY ROOMS ON FLOOR PLAN
-
-function displayRooms() {
-
-    // Clear the current rooms from the canvas.
-
-    floorPlan.innerHTML = "";
-
-
-    // Display every room stored in the rooms array.
-
-    rooms.forEach(function(room, index) {
-
-        const roomElement = document.createElement("div");
-
-        roomElement.classList.add("room");
-
-        roomElement.dataset.id = room.id;
-
-
-        // Add selected styling.
-
-        if (room.id === selectedRoomId) {
-            roomElement.classList.add("selected");
-        }
-
-        
-        // ROOM SIZE
-
-        // 1 foot is represented by 10 pixels.
-
-        roomElement.style.width =
-            room.width * 10 + "px";
-
-        roomElement.style.height =
-            room.height * 10 + "px";
-
-        
-        // ROOM POSITION
-
-        roomElement.style.left = room.x + "px";
-        roomElement.style.top = room.y + "px";
-
-
-        // Calculate square footage.
-
-        const area =
-            room.width * room.height;
-
-
-        // Add room information.
-
-        roomElement.innerHTML = `
-            <span class="room-name">
-                ${room.name}
-            </span>
-
-            <small class="room-dimensions">
-                ${room.width}' × ${room.height}'
-            </small>
-
-            <small class="room-area">
-                ${area} sq. ft.
-            </small>
-        `;
-
-
-        // Clicking the room selects it.
-
-        roomElement.addEventListener(
-            "click",
-            function(event) {
-
-                event.stopPropagation();
-
-                selectRoom(room.id);
-
-            }
-        );
-
-
-        floorPlan.appendChild(roomElement);
-
-    });
-
-}
-
-
+// =====================================================
 // SELECT ROOM
+// =====================================================
 
 function selectRoom(roomId) {
 
@@ -202,134 +241,70 @@ function selectRoom(roomId) {
 
     displayRooms();
 
-    updatePropertiesPanel();
+    loadSelectedRoom();
+
 }
 
 
-// Clicking empty space deselects the room.
+// =====================================================
+// LOAD SELECTED ROOM INTO PROPERTIES PANEL
+// =====================================================
 
-floorPlan.addEventListener(
-    "click",
-    function(event) {
+function loadSelectedRoom() {
 
-        if (event.target === floorPlan) {
+    const room = rooms.find(function (room) {
 
-            selectedRoomId = null;
+        return room.id === selectedRoomId;
 
-            displayRooms();
+    });
 
-            clearPropertiesPanel();
 
-        }
+    if (!room) {
+
+        roomNameInput.value = "";
+
+        roomWidthInput.value = "";
+
+        roomHeightInput.value = "";
+
+        return;
 
     }
-);
 
 
-// PROPERTIES PANEL
+    roomNameInput.value =
+        room.name;
 
-function updatePropertiesPanel() {
+    roomWidthInput.value =
+        room.width;
 
-    const selectedRoom =
-        rooms.find(function(room) {
+    roomHeightInput.value =
+        room.height;
+
+}
+
+
+// =====================================================
+// UPDATE ROOM
+// =====================================================
+
+if (updateRoomBtn) {
+
+    updateRoomBtn.addEventListener("click", function () {
+
+        const room = rooms.find(function (room) {
 
             return room.id === selectedRoomId;
 
         });
 
 
-    if (!selectedRoom) {
-        clearPropertiesPanel();
-        return;
-    }
-
-
-    roomNameInput.value =
-        selectedRoom.name;
-
-    widthInput.value =
-        selectedRoom.width;
-
-    heightInput.value =
-        selectedRoom.height;
-
-    roomArea.textContent =
-        selectedRoom.width *
-        selectedRoom.height;
-}
-
-
-function clearPropertiesPanel() {
-
-    roomNameInput.value = "";
-
-    widthInput.value = "";
-
-    heightInput.value = "";
-
-    roomArea.textContent = "0";
-}
-
-
-// LIVE SQUARE FOOTAGE PREVIEW
-
-widthInput.addEventListener(
-    "input",
-    calculateAreaPreview
-);
-
-heightInput.addEventListener(
-    "input",
-    calculateAreaPreview
-);
-
-
-function calculateAreaPreview() {
-
-    const width =
-        Number(widthInput.value);
-
-    const height =
-        Number(heightInput.value);
-
-
-    if (width > 0 && height > 0) {
-
-        roomArea.textContent =
-            width * height;
-
-    } else {
-
-        roomArea.textContent = "0";
-
-    }
-}
-
-
-// UPDATE ROOM
-
-updateRoomBtn.addEventListener(
-    "click",
-    function() {
-
-        if (selectedRoomId === null) {
+        if (!room) {
 
             alert("Please select a room first.");
 
             return;
-        }
 
-
-        const selectedRoom =
-            rooms.find(function(room) {
-
-                return room.id === selectedRoomId;
-
-            });
-
-
-        if (!selectedRoom) {
-            return;
         }
 
 
@@ -337,226 +312,423 @@ updateRoomBtn.addEventListener(
             roomNameInput.value.trim();
 
         const newWidth =
-            Number(widthInput.value);
+            Number(roomWidthInput.value);
 
         const newHeight =
-            Number(heightInput.value);
+            Number(roomHeightInput.value);
 
 
-        // Make sure dimensions are valid.
+        // Validate dimensions.
 
-        if (newWidth <= 0 || newHeight <= 0) {
+        if (
+            newName === "" ||
+            newWidth <= 0 ||
+            newHeight <= 0
+        ) {
 
             alert(
-                "Width and height must be greater than 0."
+                "Please enter a valid room name and dimensions."
             );
 
             return;
+
         }
 
 
-        // Update room information.
+        room.name =
+            newName;
 
-        selectedRoom.name =
-            newName || "Room";
-
-        selectedRoom.width =
+        room.width =
             newWidth;
 
-        selectedRoom.height =
+        room.height =
             newHeight;
 
 
         displayRooms();
 
-        updatePropertiesPanel();
+    });
 
-        updatePlanSummary();
-
-    }
-);
+}
 
 
+// =====================================================
 // DELETE ROOM
+// =====================================================
 
-deleteRoomBtn.addEventListener(
-    "click",
-    function() {
+if (deleteRoomBtn) {
+
+    deleteRoomBtn.addEventListener("click", function () {
 
         if (selectedRoomId === null) {
 
-            alert("Please select a room to delete.");
+            alert("Please select a room first.");
 
             return;
+
         }
 
 
-        rooms = rooms.filter(
-            function(room) {
+        rooms = rooms.filter(function (room) {
 
-                return room.id !== selectedRoomId;
+            return room.id !== selectedRoomId;
 
-            }
-        );
+        });
 
 
         selectedRoomId = null;
 
 
+        roomNameInput.value = "";
+
+        roomWidthInput.value = "";
+
+        roomHeightInput.value = "";
+
+
         displayRooms();
 
-        clearPropertiesPanel();
+    });
 
-        updatePlanSummary();
+}
+
+
+// =====================================================
+// SPRINT 3
+// DRAG AND DROP ROOMS
+// =====================================================
+
+let draggedRoom = null;
+
+let draggedRoomData = null;
+
+let dragOffsetX = 0;
+
+let dragOffsetY = 0;
+
+
+// -----------------------------------------------------
+// START DRAG
+// -----------------------------------------------------
+
+floorPlan.addEventListener(
+    "mousedown",
+    function (event) {
+
+        const roomElement =
+            event.target.closest(".room");
+
+
+        if (!roomElement) {
+            return;
+        }
+
+
+        event.preventDefault();
+
+
+        const roomId =
+            Number(roomElement.dataset.id);
+
+
+        draggedRoomData =
+            rooms.find(function (room) {
+
+                return room.id === roomId;
+
+            });
+
+
+        if (!draggedRoomData) {
+            return;
+        }
+
+
+        // Select the room without redrawing the canvas.
+
+        selectedRoomId =
+            roomId;
+
+
+        draggedRoom =
+            roomElement;
+
+
+        const roomRect =
+            roomElement.getBoundingClientRect();
+
+
+        dragOffsetX =
+            event.clientX - roomRect.left;
+
+        dragOffsetY =
+            event.clientY - roomRect.top;
+
+
+        draggedRoom.classList.add("selected");
+
+        draggedRoom.style.cursor =
+            "grabbing";
+
+
+        // Load room properties without calling displayRooms().
+        // Calling displayRooms() here would recreate the room
+        // while we're trying to drag it.
+
+        roomNameInput.value =
+            draggedRoomData.name;
+
+        roomWidthInput.value =
+            draggedRoomData.width;
+
+        roomHeightInput.value =
+            draggedRoomData.height;
 
     }
 );
 
 
-// PLAN SUMMARY
+// -----------------------------------------------------
+// MOVE ROOM
+// -----------------------------------------------------
 
-function updatePlanSummary() {
+document.addEventListener(
+    "mousemove",
+    function (event) {
 
-    roomCount.textContent =
+        if (
+            !draggedRoom ||
+            !draggedRoomData
+        ) {
+
+            return;
+
+        }
+
+
+        const floorRect =
+            floorPlan.getBoundingClientRect();
+
+
+        let newX =
+            event.clientX -
+            floorRect.left -
+            dragOffsetX;
+
+
+        let newY =
+            event.clientY -
+            floorRect.top -
+            dragOffsetY;
+
+
+        // ---------------------------------------------
+        // KEEP ROOM INSIDE GRID
+        // ---------------------------------------------
+
+        const maxX =
+            floorPlan.clientWidth -
+            draggedRoom.offsetWidth;
+
+
+        const maxY =
+            floorPlan.clientHeight -
+            draggedRoom.offsetHeight;
+
+
+        newX =
+            Math.max(
+                0,
+                Math.min(newX, maxX)
+            );
+
+
+        newY =
+            Math.max(
+                0,
+                Math.min(newY, maxY)
+            );
+
+
+        // ---------------------------------------------
+        // MOVE ROOM VISUALLY
+        // ---------------------------------------------
+
+        draggedRoom.style.left =
+            newX + "px";
+
+        draggedRoom.style.top =
+            newY + "px";
+
+
+        // ---------------------------------------------
+        // IMPORTANT:
+        // UPDATE ROOM DATA WHILE DRAGGING
+        // ---------------------------------------------
+
+        draggedRoomData.x =
+            newX;
+
+        draggedRoomData.y =
+            newY;
+
+    }
+);
+
+
+// -----------------------------------------------------
+// STOP DRAG
+// -----------------------------------------------------
+
+document.addEventListener(
+    "mouseup",
+    function () {
+
+        if (!draggedRoom) {
+            return;
+        }
+
+
+        draggedRoom.style.cursor =
+            "grab";
+
+
+        // The X/Y position is already stored in the
+        // rooms array, so the room will stay here.
+
+        draggedRoom = null;
+
+        draggedRoomData = null;
+
+    }
+);
+
+
+// =====================================================
+// ROOM SUMMARY
+// =====================================================
+
+function updateSummary() {
+
+    const roomCount =
         rooms.length;
 
 
-    let planArea = 0;
+    let totalArea = 0;
 
 
-    rooms.forEach(function(room) {
+    rooms.forEach(function (room) {
 
-        planArea +=
+        totalArea +=
             room.width * room.height;
 
     });
 
 
-    totalArea.textContent =
-        planArea;
+    if (roomCountDisplay) {
 
-    footerArea.textContent =
-        planArea;
+        roomCountDisplay.textContent =
+            roomCount;
+
+    }
+
+
+    if (totalAreaDisplay) {
+
+        totalAreaDisplay.textContent =
+            totalArea;
+
+    }
+
 }
 
 
+// =====================================================
 // NEW PLAN
+// =====================================================
 
-newPlanBtn.addEventListener(
-    "click",
-    function() {
+if (newPlanBtn) {
 
-        const startNewPlan =
-            confirm(
-                "Start a new plan? All current rooms will be removed."
+    newPlanBtn.addEventListener(
+        "click",
+        function () {
+
+            const confirmNewPlan =
+                confirm(
+                    "Start a new plan? This will remove all rooms."
+                );
+
+
+            if (!confirmNewPlan) {
+                return;
+            }
+
+
+            rooms = [];
+
+            selectedRoomId = null;
+
+            nextRoomId = 1;
+
+
+            roomNameInput.value = "";
+
+            roomWidthInput.value = "";
+
+            roomHeightInput.value = "";
+
+
+            displayRooms();
+
+        }
+    );
+
+}
+
+
+// =====================================================
+// SAVE BUTTON
+// Sprint 3 preparation
+// =====================================================
+
+if (saveBtn) {
+
+    saveBtn.addEventListener(
+        "click",
+        function () {
+
+            alert(
+                "Save functionality will be added next."
             );
 
-
-        if (!startNewPlan) {
-            return;
         }
+    );
+
+}
 
 
-        rooms = [];
+// =====================================================
+// EXPORT BUTTON
+// =====================================================
 
-        selectedRoomId = null;
+if (exportBtn) {
 
-        nextRoomId = 1;
+    exportBtn.addEventListener(
+        "click",
+        function () {
 
+            alert(
+                "Export functionality will be added in a future update."
+            );
 
-        displayRooms();
-
-        clearPropertiesPanel();
-
-        updatePlanSummary();
-
-    }
-);
-
-let draggedRoom = null;
-let dragOffsetX = 0;
-let dragOffsetY = 0;
-
-// Start dragging when the mouse is pressed on a room
-floorPlan.addEventListener("mousedown", function (event) {
-
-    const room = event.target.closest(".room");
-
-    if (!room) {
-        return;
-    }
-
-    draggedRoom = room;
-
-    const roomRect = room.getBoundingClientRect();
-
-    dragOffsetX = event.clientX - roomRect.left;
-    dragOffsetY = event.clientY - roomRect.top;
-
-    room.style.cursor = "grabbing";
-});
-
-// Move selected room
-document.addEventListener("mousemove", function (event) {
-
-    if (!draggedRoom) {
-        return;
-    }
-
-    const floorPlanRect = floorPlan.getBoundingClientRect();
-
-    let newX =
-        event.clientX -
-        floorPlanRect.left -
-        dragOffsetX;
-
-    let newY =
-        event.clientY -
-        floorPlanRect.top -
-        dragOffsetY;
-
-    // Keep room inside floor plan
-    const maxX =
-        floorPlan.clientWidth -
-        draggedRoom.offsetWidth;
-
-    const maxY =
-        floorPlan.clientHeight -
-        draggedRoom.offsetHeight;
-
-    newX = Math.max(0, Math.min(newX, maxX));
-    newY = Math.max(0, Math.min(newY, maxY));
-
-    draggedRoom.style.left = newX + "px";
-    draggedRoom.style.top = newY + "px";
-});
-
-// Stop dragging when mouse button is released
-document.addEventListener("mouseup", function () {
-
-    if (draggedRoom) {
-
-
-        const roomId = Number(draggedRoom.dataset.id);
-
-        const room = rooms.find(function(room) {
-            return room.id === roomId;
-        });
-
-        if (room) {
-            room.x = parseFloat(draggedRoom.style.left);
-            room.y = parseFloat(draggedRoom.style.top);
         }
+    );
 
-        draggedRoom.style.cursor = "grab";
-        draggedRoom = null;
-    }
-});
+}
 
 
+// =====================================================
+// INITIAL PAGE LOAD
+// =====================================================
 
 displayRooms();
-
-updatePropertiesPanel();
-
-updatePlanSummary();
