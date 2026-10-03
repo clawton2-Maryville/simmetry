@@ -268,6 +268,8 @@ function loadSelectedRoom() {
 
         roomHeightInput.value = "";
 
+        roomAreaDisplay.textContent = "0";
+
         return;
 
     }
@@ -286,6 +288,36 @@ function loadSelectedRoom() {
     room.width * room.height;
 
 }
+
+// =====================================================
+// LIVE ROOM AREA CALCULATION
+// Updates square footage when width or height changes
+// =====================================================
+
+function updateRoomAreaPreview() {
+
+    const width =
+        parseFloat(roomWidthInput.value) || 0;
+
+    const height =
+        parseFloat(roomHeightInput.value) || 0;
+
+    const area =
+        width * height;
+
+    roomAreaDisplay.textContent = area;
+}
+
+
+roomWidthInput.addEventListener(
+    "input",
+    updateRoomAreaPreview
+);
+
+roomHeightInput.addEventListener(
+    "input",
+    updateRoomAreaPreview
+);
 
 // =====================================================
 // UPDATE ROOM
