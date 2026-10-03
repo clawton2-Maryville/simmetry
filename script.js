@@ -25,7 +25,11 @@ let rooms = [
         id: 1,
         name: "Living Room",
         width: 12,
-        height: 14
+        height: 14,
+
+        // SPRINT 3 - Store room position
+        x: 30,
+        y: 30
     }
 ];
 
@@ -78,13 +82,16 @@ function addRoom(roomType) {
 
     const defaultSize = defaultRoomSizes[roomType];
 
-    const newRoom = {
+     const newRoom = {
         id: nextRoomId,
         name: roomType,
         width: defaultSize.width,
-        height: defaultSize.height
+        height: defaultSize.height,
+    
+        // SPRINT 3 - Give new rooms a starting position
+        x: 30 + (rooms.length * 35),
+        y: 30 + (rooms.length * 35)
     };
-
     rooms.push(newRoom);
 
     selectedRoomId = nextRoomId;
@@ -139,14 +146,8 @@ function displayRooms() {
         
         // ROOM POSITION
 
-        // Offset each new room slightly so
-        // they don't completely overlap.
-
-        roomElement.style.left =
-            30 + (index * 35) + "px";
-
-        roomElement.style.top =
-            30 + (index * 35) + "px";
+        roomElement.style.left = room.x + "px";
+        roomElement.style.top = room.y + "px";
 
 
         // Calculate square footage.
@@ -534,6 +535,19 @@ document.addEventListener("mousemove", function (event) {
 document.addEventListener("mouseup", function () {
 
     if (draggedRoom) {
+
+
+        const roomId = Number(draggedRoom.dataset.id);
+
+        const room = rooms.find(function(room) {
+            return room.id === roomId;
+        });
+
+        if (room) {
+            room.x = parseFloat(draggedRoom.style.left);
+            room.y = parseFloat(draggedRoom.style.top);
+        }
+
         draggedRoom.style.cursor = "grab";
         draggedRoom = null;
     }
