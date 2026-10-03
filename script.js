@@ -630,38 +630,38 @@ document.addEventListener(
 // ROOM SUMMARY
 // =====================================================
 
+// =====================================================
+// UPDATE FLOOR PLAN SUMMARY
+// Calculates rooms and total house square footage
+// =====================================================
+
 function updateSummary() {
 
-    const roomCount =
-        rooms.length;
+    // Number of rooms currently on the floor plan
+    const roomCount = rooms.length;
 
-
+    // Calculate total square footage
     let totalArea = 0;
-
 
     rooms.forEach(function (room) {
 
-        totalArea +=
-            room.width * room.height;
+        const roomArea =
+            Number(room.width) * Number(room.height);
 
+        totalArea += roomArea;
     });
 
 
+    // Update room count
     if (roomCountDisplay) {
-
-        roomCountDisplay.textContent =
-            roomCount;
-
+        roomCountDisplay.textContent = roomCount;
     }
 
 
+    // Update total house area
     if (totalAreaDisplay) {
-
-        totalAreaDisplay.textContent =
-            totalArea;
-
+        totalAreaDisplay.textContent = totalArea;
     }
-
 }
 
 
