@@ -318,3 +318,18 @@ footer button {
 
     cursor: pointer;
 }
+
+
+.floor-plan {
+    position: relative;
+}
+
+.room {
+    position: absolute;
+    cursor: grab;
+    user-select: none;
+}
+
+.room:active {
+    cursor: grabbing;
+}
