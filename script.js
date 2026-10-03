@@ -283,70 +283,56 @@ function loadSelectedRoom() {
 
 }
 
-
 // =====================================================
 // UPDATE ROOM
+// Allows the selected room's name and size to be edited
 // =====================================================
 
 if (updateRoomBtn) {
 
     updateRoomBtn.addEventListener("click", function () {
 
-        const room = rooms.find(function (room) {
-
+        // Find the room that is currently selected
+        const selectedRoom = rooms.find(function (room) {
             return room.id === selectedRoomId;
-
         });
 
-
-        if (!room) {
-
+        // Make sure a room is selected
+        if (!selectedRoom) {
             alert("Please select a room first.");
-
             return;
-
         }
 
+        // Get the values from the Properties panel
+        const newName = roomNameInput.value.trim();
+        const newWidth = parseFloat(roomWidthInput.value);
+        const newHeight = parseFloat(roomHeightInput.value);
 
-        const newName =
-            roomNameInput.value.trim();
-
-        const newWidth =
-            Number(roomWidthInput.value);
-
-        const newHeight =
-            Number(roomHeightInput.value);
-
-
-        // Validate dimensions.
-
+        // Make sure the values are valid
         if (
             newName === "" ||
+            isNaN(newWidth) ||
+            isNaN(newHeight) ||
             newWidth <= 0 ||
             newHeight <= 0
         ) {
-
-            alert(
-                "Please enter a valid room name and dimensions."
-            );
-
+            alert("Please enter a valid room name, width, and height.");
             return;
-
         }
 
+        // Update the room data
+        selectedRoom.name = newName;
+        selectedRoom.width = newWidth;
+        selectedRoom.height = newHeight;
 
-        room.name =
-            newName;
-
-        room.width =
-            newWidth;
-
-        room.height =
-            newHeight;
-
+        // IMPORTANT:
+        // We do NOT change selectedRoom.x or selectedRoom.y.
+        // This allows the room to resize without moving back.
 
         displayRooms();
 
+        // Reload the information into the Properties panel
+        loadSelectedRoom();
     });
 
 }
