@@ -38,132 +38,96 @@ button {
                 box-shadow 0.2s;
 }
 
-/* ==========================================
-   HEADER
-   ========================================== */
-
 
 /* ==========================================
    HEADER
    ========================================== */
 
 .top-bar {
-    min-height: 140px;
-    padding: 15px 40px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 25px;
-
-    background: #2B1D3A;
-    color: white;
-    border-bottom: 4px solid #D9B163;
+    min-height: 125px;
+    padding: 18px 40px;
 }
 
-/* LOGO AND BRAND NAME */
+.top-bar h1 {
+    margin: 0;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+
+.top-bar p {
+    margin: 6px 0 0;
+    color: #DDD4E5;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
 
 .brand {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
 }
 
 .brand-logo {
-    width: 145px;
-    height: 110px;
-
+    width: 90px;
+    height: 90px;
     object-fit: contain;
-    object-position: center;
 
     background: #F7F5F0;
-    padding: 0;
+    padding: 12px;
+    border-radius: 14px;
 
     border: 2px solid #D9B163;
-    border-radius: 12px;
 
-    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
-
-/* SIMMETRY TEXT */
 
 .brand-text h1 {
     margin: 0;
-    font-size: 46px;
-    font-weight: 800;
+    font-size: 42px;
+    font-weight: 700;
     letter-spacing: 4px;
     color: #FFFFFF;
 }
 
 .brand-text p {
-    margin: 6px 0 0;
-    font-size: 14px;
+    margin-top: 6px;
+    color: #D9B163;
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: 2px;
-    color: #D9B163;
 }
-
-/* HEADER NAVIGATION */
 
 .top-bar nav {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
     gap: 12px;
 }
 
 .top-bar nav button {
-    padding: 12px 22px;
-
+    padding: 11px 22px;
+    border-radius: 7px;
+    border: 1px solid #88788F;
     background: transparent;
     color: white;
-
-    border: 1px solid #88788F;
-    border-radius: 7px;
-
     font-size: 13px;
     font-weight: 600;
-
-    cursor: pointer;
-    transition: all 0.2s ease;
 }
 
 .top-bar nav button:hover {
     background: #493557;
-    border-color: #D9B163;
+    border-color: var(--gold);
 }
 
-/* NEW PLAN BUTTON */
-
 #newPlanBtn {
-    background: #D9B163;
-    color: #2B1D3A;
-    border-color: #D9B163;
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--plum);
 }
 
 #newPlanBtn:hover {
     background: #E9C77E;
 }
-
-/* SMALLER SCREENS */
-
-@media (max-width: 750px) {
-    .top-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 20px;
-    }
-
-    .brand-logo {
-        width: 100px;
-        height: 85px;
-    }
-
-    .brand-text h1 {
-        font-size: 32px;
-    }
-}
-
 
 /* ==========================================
    MAIN WORKSPACE
