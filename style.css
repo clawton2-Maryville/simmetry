@@ -42,19 +42,21 @@ button {
    HEADER
    ========================================== */
 
+
 .top-bar {
     min-height: 110px;
-    padding: 22px 40px;
-    background: var(--plum);
-    color: white;
+    padding: 15px 40px;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 20px;
 
-    border-bottom: 4px solid var(--gold);
+    background: #2B1D3A;
+    color: #FFFFFF;
+    border-bottom: 4px solid #D9B163;
 }
+
 
 .top-bar h1 {
     margin: 0;
