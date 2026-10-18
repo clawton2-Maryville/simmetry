@@ -52,9 +52,9 @@ button {
     align-items: center;
     gap: 20px;
 
-    background: #2B1D3A;
+    background: var(--cream);
     color: #FFFFFF;
-    border-bottom: 4px solid #D9B163;
+    border-bottom: 4px solid var(--plum);
 }
 
 
