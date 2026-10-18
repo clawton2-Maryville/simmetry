@@ -43,9 +43,9 @@ button {
    ========================================== */
 
 .top-bar {
-    min-height: 110px;
-    padding: 22px 40px;
-    background: var(--plum);
+    min-height: 125px;
+    padding: 18px 40px;
+    background: var(--gold);
     color: white;
 
     display: flex;
@@ -73,13 +73,37 @@ button {
 .brand {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 20px;
 }
 
 .brand-logo {
-    width: 72px;
-    height: 72px;
+    width: 90px;
+    height: 90px;
     object-fit: contain;
+
+    background: #F7F5F0;
+    padding: 12px;
+    border-radius: 14px;
+
+    border: 2px solid #D9B163;
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.brand-text h1 {
+    margin: 0;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: #FFFFFF;
+}
+
+.brand-text p {
+    margin-top: 6px;
+    color: #D9B163;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
 }
 
 .top-bar nav {
