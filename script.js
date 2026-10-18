@@ -89,9 +89,6 @@ function updateSummary() {
 
     document.getElementById("totalArea").textContent =
         totalArea;
-
-    document.getElementById("footerArea").textContent =
-        totalArea;
 }
 
 
