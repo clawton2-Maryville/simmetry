@@ -45,15 +45,6 @@ button {
 .top-bar {
     min-height: 125px;
     padding: 18px 40px;
-    background: var(--gold);
-    color: white;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-
-    border-bottom: 4px solid var(--gold);
 }
 
 .top-bar h1 {
