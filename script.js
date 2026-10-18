@@ -76,26 +76,24 @@ function formatArea(value) {
 // TOTAL HOUSE SQUARE FOOTAGE
 // -----------------------------------------------------
 
-function updateSummary() {
 
+function updateSummary() {
     let totalArea = 0;
 
     rooms.forEach(function(room) {
-        totalArea += room.width * room.height;
+        totalArea += Number(room.width) * Number(room.height);
     });
 
-    if (roomCountDisplay) {
-        roomCountDisplay.textContent = rooms.length;
-    }
+    document.getElementById("roomCount").textContent =
+        rooms.length;
 
-    if (totalAreaDisplay) {
-        totalAreaDisplay.textContent = formatArea(totalArea);
-    }
+    document.getElementById("totalArea").textContent =
+        totalArea;
 
-    if (footerAreaDisplay) {
-        footerAreaDisplay.textContent = formatArea(totalArea);
-    }
+    document.getElementById("footerArea").textContent =
+        totalArea;
 }
+
 
 
 // -----------------------------------------------------
