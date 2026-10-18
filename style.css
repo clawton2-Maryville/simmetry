@@ -105,7 +105,7 @@ button {
     border-color: var(--gold);
 }
 
-#newPlanBtn {
+.newPlanBtn {
     background: var(--gold);
     border-color: var(--gold);
     color: var(--plum);
