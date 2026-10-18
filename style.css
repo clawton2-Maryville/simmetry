@@ -1,335 +1,536 @@
+
+/* ==========================================
+   SIMMETRY - FINAL CAPSTONE STYLING
+   ========================================== */
+
+:root {
+    --plum: #2B1D3A;
+    --stone: #C8C2B5;
+    --gold: #D9B163;
+    --slate: #374254;
+    --charcoal: #2A2A2D;
+
+    --cream: #F7F5F0;
+    --white: #FFFFFF;
+    --border: #DDD8CE;
+    --muted: #756F79;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f5f3ee;
-    color: #333;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
 }
 
-button,
-input {
+button, input {
     font: inherit;
 }
 
 button {
     cursor: pointer;
+    transition: background 0.2s, 
+                border-color 0.2s,
+                box-shadow 0.2s;
 }
 
+/* ==========================================
+   HEADER
+   ========================================== */
+
 .top-bar {
-    min-height: 85px;
-    padding: 15px 25px;
-    background-color: #304f46;
+    min-height: 110px;
+    padding: 22px 40px;
+    background: var(--plum);
     color: white;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
+
+    border-bottom: 4px solid var(--gold);
 }
 
 .top-bar h1 {
     margin: 0;
-    font-size: 30px;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: 3px;
 }
 
 .top-bar p {
-    margin: 3px 0 0;
-    font-size: 14px;
+    margin: 6px 0 0;
+    color: #DDD4E5;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.brand-logo {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
 }
 
 .top-bar nav {
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-.top-bar button {
-    padding: 9px 15px;
-    border: 1px solid white;
-    border-radius: 5px;
+.top-bar nav button {
+    padding: 11px 22px;
+    border-radius: 7px;
+    border: 1px solid #88788F;
     background: transparent;
     color: white;
+    font-size: 13px;
+    font-weight: 600;
 }
+
+.top-bar nav button:hover {
+    background: #493557;
+    border-color: var(--gold);
+}
+
+#newPlanBtn {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--plum);
+}
+
+#newPlanBtn:hover {
+    background: #E9C77E;
+}
+
+/* ==========================================
+   MAIN WORKSPACE
+   ========================================== */
 
 .workspace {
     display: grid;
-    grid-template-columns: 190px 1fr 220px;
-    min-height: 650px;
+    grid-template-columns: 235px minmax(0, 1fr) 270px;
+    min-height: 680px;
 }
+
+/* ==========================================
+   SIDE PANELS
+   ========================================== */
 
 .tool-panel,
 .properties-panel {
-    padding: 20px;
-    background-color: #e5ded2;
+    padding: 28px 20px;
+    background: #F0EDE7;
 }
 
 .tool-panel {
-    border-right: 1px solid #c7bfb3;
+    border-right: 1px solid var(--border);
 }
 
 .properties-panel {
-    border-left: 1px solid #c7bfb3;
+    border-left: 1px solid var(--border);
 }
 
 .tool-panel h2,
 .properties-panel h2 {
+    margin: 0 0 18px;
+    color: var(--plum);
     font-size: 17px;
-    margin: 10px 0 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
 }
+
+.tool-panel h2:not(:first-child) {
+    margin-top: 30px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+}
+
+/* ==========================================
+   ROOM AND ELEMENT BUTTONS
+   ========================================== */
 
 .tool {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 8px;
-    background-color: white;
-    border: 1px solid #bbb;
-    border-radius: 5px;
+    padding: 13px 15px;
+    margin-bottom: 10px;
+
+    background: white;
+    color: var(--slate);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--stone);
+    border-radius: 7px;
+
     text-align: left;
+    font-size: 14px;
+    font-weight: 500;
 }
 
+.tool:hover {
+    background: #FBF5E9;
+    border-left-color: var(--gold);
+    color: var(--plum);
+    box-shadow: 0 3px 10px rgba(43, 29, 58, 0.08);
+}
+
+/* ==========================================
+   PLAN SUMMARY
+   ========================================== */
+
+.plan-summary {
+    margin-top: 32px;
+    padding: 20px 16px;
+    background: white;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    border-radius: 9px;
+    box-shadow: 0 3px 12px rgba(43, 29, 58, 0.04);
+}
+
+.plan-summary h2 {
+    margin: 0 0 16px;
+    font-size: 16px;
+}
+
+.plan-summary p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+
+    margin: 12px 0;
+    font-size: 13px;
+    color: var(--slate);
+}
+
+.plan-summary strong {
+    color: var(--plum);
+    font-weight: 700;
+    text-align: right;
+}
+
+/* ==========================================
+   FLOOR PLAN WORKSPACE
+   ========================================== */
+
 .canvas-area {
-    padding: 20px;
+    min-width: 0;
+    padding: 28px;
+    background: var(--cream);
 }
 
 .canvas-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
 }
 
 .canvas-header h2 {
-    margin: 0 0 15px;
+    margin: 0;
+    color: var(--plum);
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.canvas-header span {
+    padding: 7px 13px;
+    border-radius: 20px;
+    background: #EAE5DC;
+    color: var(--slate);
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .floor-plan {
     position: relative;
-    height: 560px;
-    border: 1px solid #aaa;
-    background-color: white;
-
-    background-image:
-        linear-gradient(#ddd 1px, transparent 1px),
-        linear-gradient(90deg, #ddd 1px, transparent 1px);
-
-    background-size: 25px 25px;
-}
-
-.sample-room {
-    position: absolute;
-    top: 100px;
-    left: 130px;
-
-    width: 250px;
-    height: 200px;
-
-    border: 3px solid #304f46;
-    background-color: rgba(48, 79, 70, 0.08);
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    font-weight: bold;
-}
-
-.sample-room small {
-    margin-top: 5px;
-    font-weight: normal;
-}
-
-.properties-panel label {
-    display: block;
-    margin: 15px 0 5px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.properties-panel input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-}
-
-.primary-button {
-    width: 100%;
-    margin-top: 20px;
-    padding: 10px;
-
-    border: none;
-    border-radius: 5px;
-
-    background-color: #304f46;
-    color: white;
-}
-
-footer {
-    min-height: 55px;
-    padding: 10px 25px;
-
-    background-color: #304f46;
-    color: white;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-footer button {
-    width: 30px;
-    height: 30px;
-    margin: 0 5px;
-
-    border: none;
-    border-radius: 4px;
-}
-
-.room-tool {
-    cursor: pointer;
-}
-
-.room-tool:hover {
-    background-color: #e5e9e2;
-}
-
-.floor-plan {
-    position: relative;
-    overflow: hidden;
+    height: 580px;
     min-height: 550px;
+    overflow: hidden;
 
+    background-color: white;
     background-image:
         linear-gradient(
-            #e1e1e1 1px,
+            rgba(55, 66, 84, 0.09) 1px,
             transparent 1px
         ),
         linear-gradient(
             90deg,
-            #e1e1e1 1px,
+            rgba(55, 66, 84, 0.09) 1px,
             transparent 1px
         );
-
     background-size: 25px 25px;
+
+    border: 1px solid #D6D2CA;
+    border-radius: 10px;
+    box-shadow: 0 5px 22px rgba(43, 29, 58, 0.07);
 }
 
-.room {
+/* ==========================================
+   DRAGGABLE ROOMS
+   ========================================== */
+
+.room,
+.sample-room {
     position: absolute;
+
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    background-color: #d9e0d5;
-    border: 3px solid #73806e;
-    cursor: pointer;
-    box-sizing: border-box;
+    align-items: center;
+
+    padding: 6px;
     min-width: 70px;
     min-height: 60px;
-    transition:
-        background-color 0.2s,
-        border 0.2s;
+
+    background: #E6E1EA;
+    border: 3px solid #887894;
+    border-radius: 3px;
+
+    color: var(--plum);
+    text-align: center;
+
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+
+    transition: background-color 0.15s,
+                border-color 0.15s;
 }
 
 .room:hover {
-    background-color: #cbd6c7;
+    background: #DCD3E4;
+    border-color: var(--plum);
 }
 
 .room.selected {
-    border: 4px solid #435c47;
-    background-color: #becdb9;
-}
-
-.room-name {
-    font-weight: bold;
-    font-size: 14px;
-    margin-bottom: 5px;
-    text-align: center;
-}
-
-.room-dimensions {
-    font-size: 12px;
-
-    margin-bottom: 3px;
-}
-
-.room-area {
-    font-size: 11px;
-
-    color: #555;
-}
-
-.plan-summary {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #cccccc;
-}
-
-
-.plan-summary h2 {
-    margin-bottom: 12px;
-}
-
-
-.plan-summary p {
-    font-size: 13px;
-    margin: 8px 0;
-}
-
-
-.room-area-display {
-    margin-top: 20px;
-    margin-bottom: 15px;
-    padding: 10px;
-    background-color: #f2f3ef;
-    border-radius: 5px;
-}
-
-
-.room-area-display p {
-    margin: 0;
-    font-size: 13px;
-}
-
-
-.delete-button {
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #b8a7a2;
-    border-radius: 5px;
-    background-color: #eee7e5;
-    color: #7b4038;
-    cursor: pointer;
-}
-
-
-.delete-button:hover {
-    background-color: #e3d6d2;
-}
-
-
-.properties-panel input {
-    width: 100%;
-
-    box-sizing: border-box;
-}
-
-#updateRoomBtn {
-    width: 100%;
-
-    cursor: pointer;
-}
-
-
-.floor-plan {
-    position: relative;
-}
-
-.room {
-    position: absolute;
-    cursor: grab;
-    user-select: none;
+    background: #F5E8C9;
+    border: 3px solid #B98C38;
+    box-shadow: inset 0 0 0 1px #E7CB8F;
 }
 
 .room:active {
     cursor: grabbing;
+}
+
+/* Supports existing HTML and JS room labels */
+
+.room strong,
+.room-name {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.room span,
+.room-dimensions {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.room small,
+.room-area {
+    margin-top: 4px;
+    font-size: 11px;
+    color: #554B5B;
+}
+
+/* ==========================================
+   PROPERTIES PANEL
+   ========================================== */
+
+.properties-panel label {
+    display: block;
+    margin: 17px 0 7px;
+    color: var(--slate);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.properties-panel input {
+    width: 100%;
+    padding: 12px 13px;
+
+    background: white;
+    border: 1px solid #CDC7BE;
+    border-radius: 7px;
+
+    color: var(--charcoal);
+    font-size: 14px;
+    outline: none;
+}
+
+.properties-panel input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(217, 177, 99, 0.2);
+}
+
+/* ==========================================
+   ROOM AREA DISPLAY
+   ========================================== */
+
+.room-area-display {
+    margin-top: 25px;
+    margin-bottom: 18px;
+    padding: 18px 15px;
+
+    background: #EAE5EF;
+    border-left: 4px solid var(--plum);
+    border-radius: 7px;
+}
+
+.room-area-display p {
+    margin: 0;
+    color: var(--slate);
+    font-size: 13px;
+}
+
+.room-area-display strong {
+    display: block;
+    margin-top: 8px;
+    color: var(--plum);
+    font-size: 21px;
+    font-weight: 700;
+}
+
+/* ==========================================
+   UPDATE AND DELETE BUTTONS
+   ========================================== */
+
+.primary-button,
+#updateRoomBtn {
+    width: 100%;
+    padding: 13px;
+    margin-top: 8px;
+
+    background: var(--plum);
+    color: white;
+    border: none;
+    border-radius: 7px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.primary-button:hover,
+#updateRoomBtn:hover {
+    background: #493357;
+}
+
+.delete-button,
+#deleteRoomBtn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+
+    background: white;
+    color: #884B50;
+    border: 1px solid #D9B8BA;
+    border-radius: 7px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.delete-button:hover,
+#deleteRoomBtn:hover {
+    background: #F8EDED;
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+footer {
+    min-height: 65px;
+    padding: 15px 35px;
+
+    background: var(--slate);
+    color: #F5F3F0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+
+    font-size: 12px;
+    letter-spacing: 0.3px;
+}
+
+footer > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+footer button {
+    width: 32px;
+    height: 32px;
+
+    background: #536077;
+    color: white;
+    border: 1px solid #718097;
+    border-radius: 6px;
+}
+
+footer button:hover {
+    background: var(--gold);
+    color: var(--plum);
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+@media (max-width: 1000px) {
+    .workspace {
+        grid-template-columns: 190px minmax(0, 1fr);
+    }
+
+    .properties-panel {
+        grid-column: 1 / -1;
+        border-left: none;
+        border-top: 1px solid var(--border);
+    }
+}
+
+@media (max-width: 650px) {
+    .top-bar {
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .top-bar h1 {
+        font-size: 30px;
+    }
+
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .tool-panel,
+    .properties-panel {
+        border: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .canvas-area {
+        padding: 18px;
+    }
+
+    footer {
+        padding: 15px 20px;
+    }
 }
