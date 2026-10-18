@@ -1,13 +1,12 @@
-// =====================================================
-// SIMMETRY
-// Floor Plan Builder
-// Sprint 3
-// =====================================================
 
+/* =====================================================
+   SIMMETRY - FLOOR PLAN BUILDER
+   Final Capstone Version
+   ===================================================== */
 
-// =====================================================
-// GET HTML ELEMENTS
-// =====================================================
+// -----------------------------------------------------
+// HTML ELEMENTS
+// -----------------------------------------------------
 
 const floorPlan = document.getElementById("floorPlan");
 
@@ -20,6 +19,7 @@ const exportBtn = document.getElementById("exportBtn");
 const roomNameInput = document.getElementById("roomName");
 const roomWidthInput = document.getElementById("roomWidth");
 const roomHeightInput = document.getElementById("roomHeight");
+
 const roomAreaDisplay = document.getElementById("roomArea");
 
 const updateRoomBtn = document.getElementById("updateRoomBtn");
@@ -27,13 +27,12 @@ const deleteRoomBtn = document.getElementById("deleteRoomBtn");
 
 const roomCountDisplay = document.getElementById("roomCount");
 const totalAreaDisplay = document.getElementById("totalArea");
+const footerAreaDisplay = document.getElementById("footerArea");
 
 
-// =====================================================
+// -----------------------------------------------------
 // ROOM DATA
-// =====================================================
-
-// This array stores all rooms currently on the floor plan.
+// -----------------------------------------------------
 
 let rooms = [
     {
@@ -47,125 +46,123 @@ let rooms = [
 ];
 
 let nextRoomId = 2;
+let selectedRoomId = 1;
 
-let selectedRoomId = null;
+const PIXELS_PER_FOOT = 10;
 
 
-// =====================================================
-// DEFAULT ROOM SIZES
-// =====================================================
+// -----------------------------------------------------
+// DEFAULT ROOM DIMENSIONS
+// -----------------------------------------------------
 
 const roomSizes = {
-
-    "Living Room": {
-        width: 12,
-        height: 14
-    },
-
-    "Kitchen": {
-        width: 10,
-        height: 12
-    },
-
-    "Bedroom": {
-        width: 10,
-        height: 10
-    },
-
-    "Bathroom": {
-        width: 8,
-        height: 8
-    }
-
+    "Living Room": { width: 12, height: 14 },
+    "Kitchen": { width: 10, height: 12 },
+    "Bedroom": { width: 10, height: 10 },
+    "Bathroom": { width: 8, height: 8 }
 };
 
 
-// =====================================================
-// DISPLAY ROOMS
-// =====================================================
+// -----------------------------------------------------
+// NUMBER FORMATTING
+// -----------------------------------------------------
+
+function formatArea(value) {
+    return Number(value.toFixed(2)).toLocaleString();
+}
+
+
+// -----------------------------------------------------
+// TOTAL HOUSE SQUARE FOOTAGE
+// -----------------------------------------------------
+
+function updateSummary() {
+
+    let totalArea = 0;
+
+    rooms.forEach(function(room) {
+        totalArea += room.width * room.height;
+    });
+
+    if (roomCountDisplay) {
+        roomCountDisplay.textContent = rooms.length;
+    }
+
+    if (totalAreaDisplay) {
+        totalAreaDisplay.textContent = formatArea(totalArea);
+    }
+
+    if (footerAreaDisplay) {
+        footerAreaDisplay.textContent = formatArea(totalArea);
+    }
+}
+
+
+// -----------------------------------------------------
+// DISPLAY ALL ROOMS
+// -----------------------------------------------------
 
 function displayRooms() {
 
-    // Clear the floor plan before redrawing rooms.
     floorPlan.innerHTML = "";
 
-    rooms.forEach(function (room) {
+    rooms.forEach(function(room) {
 
         const roomElement = document.createElement("div");
 
         roomElement.classList.add("room");
-
-        // Store room ID in the HTML element.
         roomElement.dataset.id = room.id;
 
-        // Display room information.
-        roomElement.innerHTML = `
-            <strong>${room.name}</strong>
-            <span>${room.width}' × ${room.height}'</span>
-        `;
+        // Store dimensions for reference.
+        roomElement.dataset.width = room.width;
+        roomElement.dataset.height = room.height;
 
+        // Display room name and dimensions safely.
+        const nameElement = document.createElement("strong");
+        nameElement.textContent = room.name;
 
-        // -------------------------------------------------
-        // ROOM SIZE
-        // -------------------------------------------------
+        const dimensionsElement = document.createElement("span");
+        dimensionsElement.textContent =
+            `${room.width}' × ${room.height}'`;
 
-        // Convert room dimensions into pixels.
-        // This is only a visual representation.
+        const areaElement = document.createElement("small");
+        areaElement.classList.add("room-area");
+        areaElement.textContent =
+            `${formatArea(room.width * room.height)} sq. ft.`;
 
+        roomElement.appendChild(nameElement);
+        roomElement.appendChild(dimensionsElement);
+        roomElement.appendChild(areaElement);
+
+        // Set visual size.
         roomElement.style.width =
-            (room.width * 10) + "px";
+            (room.width * PIXELS_PER_FOOT) + "px";
 
         roomElement.style.height =
-            (room.height * 10) + "px";
+            (room.height * PIXELS_PER_FOOT) + "px";
 
-
-        // -------------------------------------------------
-        // SPRINT 3 - ROOM POSITION
-        // -------------------------------------------------
-
-        // Position comes directly from the room object.
-        // This prevents rooms from bouncing back.
-
-        roomElement.style.left =
-            room.x + "px";
-
-        roomElement.style.top =
-            room.y + "px";
-
-
-        // -------------------------------------------------
-        // SELECTED ROOM
-        // -------------------------------------------------
+        // Keep the room in its saved position.
+        roomElement.style.left = room.x + "px";
+        roomElement.style.top = room.y + "px";
 
         if (room.id === selectedRoomId) {
             roomElement.classList.add("selected");
         }
 
-
-        // -------------------------------------------------
-        // SELECT ROOM
-        // -------------------------------------------------
-
-        roomElement.addEventListener("click", function () {
-
+        roomElement.addEventListener("click", function() {
             selectRoom(room.id);
-
         });
 
-
         floorPlan.appendChild(roomElement);
-
     });
 
-
     updateSummary();
-
 }
 
 
-// =====================================================
-// ADD ROOM
-// =====================================================
+// -----------------------------------------------------
+// ADD A NEW ROOM
+// -----------------------------------------------------
 
 function addRoom(roomType) {
 
@@ -175,139 +172,97 @@ function addRoom(roomType) {
         return;
     }
 
-
-    // Offset rooms so new rooms don't completely overlap.
-
-    const newPosition =
-        30 + (rooms.length * 35);
-
+    const position = 30 + (rooms.length * 35);
 
     const newRoom = {
-
-        id: nextRoomId,
-
+        id: nextRoomId++,
         name: roomType,
-
         width: defaultSize.width,
-
         height: defaultSize.height,
-
-        // Sprint 3 position data
-
-        x: newPosition,
-
-        y: newPosition
-
+        x: position,
+        y: position
     };
 
-
     rooms.push(newRoom);
-
-    nextRoomId++;
 
     selectedRoomId = newRoom.id;
 
     displayRooms();
-
     loadSelectedRoom();
-
 }
 
 
-// =====================================================
-// ROOM BUTTONS
-// =====================================================
+// -----------------------------------------------------
+// ROOM SELECTION BUTTONS
+// -----------------------------------------------------
 
-roomButtons.forEach(function (button) {
+roomButtons.forEach(function(button) {
 
-    button.addEventListener("click", function () {
-
-        const roomType =
-            button.dataset.room;
-
-        addRoom(roomType);
-
+    button.addEventListener("click", function() {
+        addRoom(button.dataset.room);
     });
 
 });
 
 
-// =====================================================
-// SELECT ROOM
-// =====================================================
+// -----------------------------------------------------
+// SELECT A ROOM
+// -----------------------------------------------------
 
 function selectRoom(roomId) {
 
     selectedRoomId = roomId;
 
     displayRooms();
-
     loadSelectedRoom();
-
 }
 
 
-// =====================================================
-// LOAD SELECTED ROOM INTO PROPERTIES PANEL
-// =====================================================
+// -----------------------------------------------------
+// LOAD SELECTED ROOM PROPERTIES
+// -----------------------------------------------------
 
 function loadSelectedRoom() {
 
-    const room = rooms.find(function (room) {
-
-        return room.id === selectedRoomId;
-
+    const room = rooms.find(function(item) {
+        return item.id === selectedRoomId;
     });
-
 
     if (!room) {
 
         roomNameInput.value = "";
-
         roomWidthInput.value = "";
-
         roomHeightInput.value = "";
 
         roomAreaDisplay.textContent = "0";
 
         return;
-
     }
 
+    roomNameInput.value = room.name;
+    roomWidthInput.value = room.width;
+    roomHeightInput.value = room.height;
 
-    roomNameInput.value =
-        room.name;
-
-    roomWidthInput.value =
-        room.width;
-
-    roomHeightInput.value =
-        room.height;
-    
     roomAreaDisplay.textContent =
-    room.width * room.height;
-
+        formatArea(room.width * room.height);
 }
 
-// =====================================================
-// LIVE ROOM AREA CALCULATION
-// Updates square footage when width or height changes
-// =====================================================
+
+// -----------------------------------------------------
+// LIVE ROOM AREA PREVIEW
+// -----------------------------------------------------
 
 function updateRoomAreaPreview() {
 
-    const width =
-        parseFloat(roomWidthInput.value) || 0;
+    const width = parseFloat(roomWidthInput.value) || 0;
+    const height = parseFloat(roomHeightInput.value) || 0;
 
-    const height =
-        parseFloat(roomHeightInput.value) || 0;
+    const area = width > 0 && height > 0
+        ? width * height
+        : 0;
 
-    const area =
-        width * height;
-
-    roomAreaDisplay.textContent = area;
+    roomAreaDisplay.textContent = formatArea(area);
 }
-
 
 roomWidthInput.addEventListener(
     "input",
@@ -319,36 +274,32 @@ roomHeightInput.addEventListener(
     updateRoomAreaPreview
 );
 
-// =====================================================
-// UPDATE ROOM
-// Allows the selected room's name and size to be edited
-// =====================================================
+
+// -----------------------------------------------------
+// UPDATE SELECTED ROOM
+// -----------------------------------------------------
 
 if (updateRoomBtn) {
 
-    updateRoomBtn.addEventListener("click", function () {
+    updateRoomBtn.addEventListener("click", function() {
 
-        // Find the room that is currently selected
-        const selectedRoom = rooms.find(function (room) {
+        const selectedRoom = rooms.find(function(room) {
             return room.id === selectedRoomId;
         });
 
-        // Make sure a room is selected
         if (!selectedRoom) {
             alert("Please select a room first.");
             return;
         }
 
-        // Get the values from the Properties panel
         const newName = roomNameInput.value.trim();
         const newWidth = parseFloat(roomWidthInput.value);
         const newHeight = parseFloat(roomHeightInput.value);
 
-        // Make sure the values are valid
         if (
             newName === "" ||
-            isNaN(newWidth) ||
-            isNaN(newHeight) ||
+            !Number.isFinite(newWidth) ||
+            !Number.isFinite(newHeight) ||
             newWidth <= 0 ||
             newHeight <= 0
         ) {
@@ -356,391 +307,207 @@ if (updateRoomBtn) {
             return;
         }
 
-        // Update the room data
         selectedRoom.name = newName;
         selectedRoom.width = newWidth;
         selectedRoom.height = newHeight;
 
-        // IMPORTANT:
-        // We do NOT change selectedRoom.x or selectedRoom.y.
-        // This allows the room to resize without moving back.
+        // Preserve X/Y coordinates so resizing does not
+        // reset the room's position.
 
         displayRooms();
-
-        // Reload the information into the Properties panel
         loadSelectedRoom();
     });
-
 }
 
 
-// =====================================================
-// DELETE ROOM
-// =====================================================
+// -----------------------------------------------------
+// DELETE SELECTED ROOM
+// -----------------------------------------------------
 
 if (deleteRoomBtn) {
 
-    deleteRoomBtn.addEventListener("click", function () {
+    deleteRoomBtn.addEventListener("click", function() {
 
         if (selectedRoomId === null) {
-
             alert("Please select a room first.");
-
             return;
-
         }
 
-
-        rooms = rooms.filter(function (room) {
-
+        rooms = rooms.filter(function(room) {
             return room.id !== selectedRoomId;
-
         });
-
 
         selectedRoomId = null;
 
-
-        roomNameInput.value = "";
-
-        roomWidthInput.value = "";
-
-        roomHeightInput.value = "";
-
-
         displayRooms();
-
+        loadSelectedRoom();
     });
-
 }
 
 
-// =====================================================
-// SPRINT 3
+// -----------------------------------------------------
 // DRAG AND DROP ROOMS
-// =====================================================
+// -----------------------------------------------------
 
 let draggedRoom = null;
-
 let draggedRoomData = null;
 
 let dragOffsetX = 0;
-
 let dragOffsetY = 0;
 
 
-// -----------------------------------------------------
-// START DRAG
-// -----------------------------------------------------
+// START DRAGGING
 
-floorPlan.addEventListener(
-    "mousedown",
-    function (event) {
+floorPlan.addEventListener("mousedown", function(event) {
 
-        const roomElement =
-            event.target.closest(".room");
-
-
-        if (!roomElement) {
-            return;
-        }
-
-
-        event.preventDefault();
-
-
-        const roomId =
-            Number(roomElement.dataset.id);
-
-
-        draggedRoomData =
-            rooms.find(function (room) {
-
-                return room.id === roomId;
-
-            });
-
-
-        if (!draggedRoomData) {
-            return;
-        }
-
-
-        // Select the room without redrawing the canvas.
-
-        selectedRoomId =
-            roomId;
-
-
-        draggedRoom =
-            roomElement;
-
-
-        const roomRect =
-            roomElement.getBoundingClientRect();
-
-
-        dragOffsetX =
-            event.clientX - roomRect.left;
-
-        dragOffsetY =
-            event.clientY - roomRect.top;
-
-
-        draggedRoom.classList.add("selected");
-
-        draggedRoom.style.cursor =
-            "grabbing";
-
-
-        // Load room properties without calling displayRooms().
-        // Calling displayRooms() here would recreate the room
-        // while we're trying to drag it.
-
-        roomNameInput.value =
-            draggedRoomData.name;
-
-        roomWidthInput.value =
-            draggedRoomData.width;
-
-        roomHeightInput.value =
-            draggedRoomData.height;
-
+    if (event.button !== 0) {
+        return;
     }
-);
 
+    const roomElement = event.target.closest(".room");
 
-// -----------------------------------------------------
-// MOVE ROOM
-// -----------------------------------------------------
-
-document.addEventListener(
-    "mousemove",
-    function (event) {
-
-        if (
-            !draggedRoom ||
-            !draggedRoomData
-        ) {
-
-            return;
-
-        }
-
-
-        const floorRect =
-            floorPlan.getBoundingClientRect();
-
-
-        let newX =
-            event.clientX -
-            floorRect.left -
-            dragOffsetX;
-
-
-        let newY =
-            event.clientY -
-            floorRect.top -
-            dragOffsetY;
-
-
-        // ---------------------------------------------
-        // KEEP ROOM INSIDE GRID
-        // ---------------------------------------------
-
-        const maxX =
-            floorPlan.clientWidth -
-            draggedRoom.offsetWidth;
-
-
-        const maxY =
-            floorPlan.clientHeight -
-            draggedRoom.offsetHeight;
-
-
-        newX =
-            Math.max(
-                0,
-                Math.min(newX, maxX)
-            );
-
-
-        newY =
-            Math.max(
-                0,
-                Math.min(newY, maxY)
-            );
-
-
-        // ---------------------------------------------
-        // MOVE ROOM VISUALLY
-        // ---------------------------------------------
-
-        draggedRoom.style.left =
-            newX + "px";
-
-        draggedRoom.style.top =
-            newY + "px";
-
-
-        // ---------------------------------------------
-        // IMPORTANT:
-        // UPDATE ROOM DATA WHILE DRAGGING
-        // ---------------------------------------------
-
-        draggedRoomData.x =
-            newX;
-
-        draggedRoomData.y =
-            newY;
-
+    if (!roomElement || !floorPlan.contains(roomElement)) {
+        return;
     }
-);
 
+    event.preventDefault();
 
-// -----------------------------------------------------
-// STOP DRAG
-// -----------------------------------------------------
+    const roomId = Number(roomElement.dataset.id);
 
-document.addEventListener(
-    "mouseup",
-    function () {
-
-        if (!draggedRoom) {
-            return;
-        }
-
-
-        draggedRoom.style.cursor =
-            "grab";
-
-
-        // The X/Y position is already stored in the
-        // rooms array, so the room will stay here.
-
-        draggedRoom = null;
-
-        draggedRoomData = null;
-
-    }
-);
-
-
-// =====================================================
-// ROOM SUMMARY
-// =====================================================
-
-// =====================================================
-// UPDATE FLOOR PLAN SUMMARY
-// Calculates rooms and total house square footage
-// =====================================================
-
-function updateTotalArea() {
-    const rooms = document.querySelectorAll("#floorPlan .room");
-
-    let totalArea = 0;
-
-    rooms.forEach(room => {
-        const width = Number(room.dataset.width);
-        const height = Number(room.dataset.height);
-
-        if (Number.isFinite(width) && Number.isFinite(height)) {
-            totalArea += width * height;
-        }
+    draggedRoomData = rooms.find(function(room) {
+        return room.id === roomId;
     });
 
-    document.getElementById("roomCount").textContent = rooms.length;
-    document.getElementById("totalArea").textContent = totalArea;
-    document.getElementById("footerArea").textContent = totalArea;
-}
+    if (!draggedRoomData) {
+        return;
+    }
+
+    selectedRoomId = roomId;
+    draggedRoom = roomElement;
+
+    const roomRect = roomElement.getBoundingClientRect();
+
+    dragOffsetX = event.clientX - roomRect.left;
+    dragOffsetY = event.clientY - roomRect.top;
+
+    document.querySelectorAll(".room").forEach(function(room) {
+        room.classList.remove("selected");
+    });
+
+    draggedRoom.classList.add("selected");
+    draggedRoom.style.cursor = "grabbing";
+
+    loadSelectedRoom();
+});
 
 
-// =====================================================
+// MOVE ROOM
+
+document.addEventListener("mousemove", function(event) {
+
+    if (!draggedRoom || !draggedRoomData) {
+        return;
+    }
+
+    const floorRect = floorPlan.getBoundingClientRect();
+
+    let newX =
+        event.clientX - floorRect.left - dragOffsetX;
+
+    let newY =
+        event.clientY - floorRect.top - dragOffsetY;
+
+    // Prevent dragging outside the grid.
+    const maxX = Math.max(
+        0,
+        floorPlan.clientWidth - draggedRoom.offsetWidth
+    );
+
+    const maxY = Math.max(
+        0,
+        floorPlan.clientHeight - draggedRoom.offsetHeight
+    );
+
+    newX = Math.max(0, Math.min(newX, maxX));
+    newY = Math.max(0, Math.min(newY, maxY));
+
+    draggedRoom.style.left = newX + "px";
+    draggedRoom.style.top = newY + "px";
+
+    // Save position directly to the room data.
+    draggedRoomData.x = newX;
+    draggedRoomData.y = newY;
+});
+
+
+// STOP DRAGGING
+
+document.addEventListener("mouseup", function() {
+
+    if (!draggedRoom) {
+        return;
+    }
+
+    draggedRoom.style.cursor = "grab";
+
+    draggedRoom = null;
+    draggedRoomData = null;
+});
+
+
+// -----------------------------------------------------
 // NEW PLAN
-// =====================================================
+// -----------------------------------------------------
 
 if (newPlanBtn) {
 
-    newPlanBtn.addEventListener(
-        "click",
-        function () {
+    newPlanBtn.addEventListener("click", function() {
 
-            const confirmNewPlan =
-                confirm(
-                    "Start a new plan? This will remove all rooms."
-                );
+        const confirmed = confirm(
+            "Start a new plan? This will remove all rooms."
+        );
 
-
-            if (!confirmNewPlan) {
-                return;
-            }
-
-
-            rooms = [];
-
-            selectedRoomId = null;
-
-            nextRoomId = 1;
-
-
-            roomNameInput.value = "";
-
-            roomWidthInput.value = "";
-
-            roomHeightInput.value = "";
-
-
-            displayRooms();
-
+        if (!confirmed) {
+            return;
         }
-    );
 
+        rooms = [];
+        selectedRoomId = null;
+        nextRoomId = 1;
+
+        displayRooms();
+        loadSelectedRoom();
+    });
 }
 
 
-// =====================================================
-// SAVE BUTTON
-// Sprint 3 preparation
-// =====================================================
+// -----------------------------------------------------
+// SAVE BUTTON - FUTURE FEATURE
+// -----------------------------------------------------
 
 if (saveBtn) {
 
-    saveBtn.addEventListener(
-        "click",
-        function () {
-
-            alert(
-                "Save functionality will be added next."
-            );
-
-        }
-    );
-
+    saveBtn.addEventListener("click", function() {
+        alert("Save functionality is planned for a future update.");
+    });
 }
 
 
-// =====================================================
-// EXPORT BUTTON
-// =====================================================
+// -----------------------------------------------------
+// EXPORT BUTTON - FUTURE FEATURE
+// -----------------------------------------------------
 
 if (exportBtn) {
 
-    exportBtn.addEventListener(
-        "click",
-        function () {
-
-            alert(
-                "Export functionality will be added in a future update."
-            );
-
-        }
-    );
-
+    exportBtn.addEventListener("click", function() {
+        alert("Export functionality is planned for a future update.");
+    });
 }
 
 
-// =====================================================
+// -----------------------------------------------------
 // INITIAL PAGE LOAD
-// =====================================================
+// -----------------------------------------------------
 
 displayRooms();
+loadSelectedRoom();
