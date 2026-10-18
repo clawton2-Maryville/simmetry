@@ -44,8 +44,17 @@ button {
    ========================================== */
 
 .top-bar {
-    min-height: 125px;
-    padding: 18px 40px;
+    min-height: 140px;
+    padding: 15px 40px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+
+    background: (--plum);
+    color: white;
+    border-bottom: 4px solid (--gold);
 }
 
 .top-bar h1 {
