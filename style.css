@@ -117,7 +117,7 @@ button {
     color: var(--plum);
 }
 
-#newPlanBtn:hover {
+.newPlanBtn:hover {
     background: #E9C77E;
 }
 
